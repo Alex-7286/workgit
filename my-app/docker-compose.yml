@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:6
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+  app:
+    build: .
+    restart: always
+    depends_on:
+      - mongo
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_URI: mongodb://mongo:27017/my-app
+      JWT_SECRET: ${JWT_SECRET}
+      KAKAO_ADMIN_KEY: ${KAKAO_ADMIN_KEY}
+      KAKAO_BASE_URL: ${KAKAO_BASE_URL}
+      KAKAO_CID: ${KAKAO_CID}
+
+volumes:
+  mongo_data:
